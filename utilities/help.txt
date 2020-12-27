@@ -1,0 +1,23 @@
+-intro        - Bot introduction
+
+-(j)oin - Let the bot join the voice channel
+
+-leave - Let the bot leave the voice channel
+
+-(p)lay [song]  - Play and/or enqueues a song
+    [song] can be a youtube link or a name of the song
+
+-(s)earch [song] - Search song via youtube search
+[song] is a name of the song
+
+-queue        - Display the list of the song currently in the queue
+
+-skip         - Skip a song in the queue
+
+-stop         - Clear the queue
+
+-remove [digit] - Remove a song in the queue list
+
+-loop none/one/all/status - Change the loop status
+
+-rand [digit] - Generates a random number with given digit (yep, that's it)
