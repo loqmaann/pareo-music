@@ -16,7 +16,7 @@ class BotMusic {
     }
 
     async queuesong (url) {
-        if (!url) return console.log(`There is nothing to queue`);
+        if (!url) return this.message.channel.send(`There is nothing to queue`);
         if (!url.match(/(youtube.com|youtu.be)\/(watch)?(\?v=)?(\S+)?(undefined)?/)) return console.log(`Failed to queue the song`);
 
         await ytdl.getBasicInfo(url)
@@ -60,7 +60,7 @@ class BotMusic {
     }
 
     setloopstatus (loopstatus) {
-        if (!this.message) return console.log(`The bot is not connected`);
+        if (!this.message) return this.message.channel.send(`The bot is not connected`);
         switch (loopstatus) {
             case 'none':
                 this.isloop = 'none';
@@ -107,7 +107,7 @@ class BotMusic {
     }
 
     leavechannel () {
-        if (!this.message) return console.log(`The bot is not connected`);
+        if (!this.message) return this.message.channel.send(`The bot is not connected`);
         if (this.message.guild.voice.connection) {
             this.message.channel.send(`Leaving the channel!`);
             this.isconnected = false;
@@ -140,7 +140,7 @@ class BotMusic {
     }
 
     async getqueue() {
-        if (!this.message) return console.log(`The bot is not connected`);
+        if (!this.message) return this.message.channel.send(`The bot is not connected`);
 
         // get loop status and display all songs in the list
         let songlist = `\nloop status = ${this.isloop}`;
@@ -165,7 +165,7 @@ class BotMusic {
     }
 
     async removesong(num) {
-        if (!this.message) return console.log(`The bot is not connected`);
+        if (!this.message) return this.message.channel.send(`The bot is not connected`);
         if (num == 1) return this.message.channel.send(`This song is currently playing, please use skip or stop command!`);
         if (num < 1 || num > this.server.Queue.length) return this.message.channel.send(`Outside of the queue bound!`);
         
@@ -178,7 +178,7 @@ class BotMusic {
     }
 
     skipsong(){
-        if (!this.message) return console.log(`The bot is not connected`);
+        if (!this.message) return this.message.channel.send(`The bot is not connected`);
         if (!this.server.Queue[0]) {
             this.message.channel.send(`The queue is empty!`);
             return;
@@ -190,7 +190,7 @@ class BotMusic {
     }
 
     stopsong(){
-        if (!this.message) return console.log(`The bot is not connected`);
+        if (!this.message) return this.message.channel.send(`The bot is not connected`);
         if (!this.server.Queue[0]) {
             this.message.channel.send(`The queue is empty!`);
             return;
