@@ -6,8 +6,6 @@ const { resolve } = require('path');
 const playlist = './utilities/playlist.json';
 const database = './utilities/database.json';
 
-var obj = {};
-
 function save_playlist(server, message){
     var db = load_database();
     db[message.author.id] = {
@@ -24,7 +22,6 @@ function load_database(){
     try {
         var rawdata = fs.readFileSync(database);
         var db = JSON.parse(rawdata);
-        return db;
     } catch(err) {
         fs.writeFileSync(database, '{}');
         var rawdata = fs.readFileSync(database);
@@ -37,26 +34,17 @@ function load_database(){
 
 function load_playlist(server, message){
     let db = load_database();
-    if(!db[message.author.id]) return message.channel.send('Playlist is not found');
+    if(!db[message.author.id]) return;
 
     message.channel.send(`${message.author.username}'s playlist loaded`);
 
     return db[message.author.id].songs;
 }
 
-function delete_playlist(message) {
-    let db = load_database();
-    if(!db[server.guildID]) return message.channel.send('Playlist is not existed');
-    if(!db[server.guildID].list[name]) return message.channel.send('Playlist is not existed');
-
-
-}
-
 function backup_database() {
     fs.copyFile(playlist, database, (err) => {
-        if (err) throw err;
+        if (err) console.log(err);
 
-        console.log('Data backup');
     })
 }
 
@@ -67,10 +55,6 @@ module.exports = {
     },
 
     loadplaylist: function (server, message) {
-        return load_playlist(server, message)
-    },
-
-    deleteplaylist: function (message) {
-
+        return load_playlist(server, message);
     }
 };

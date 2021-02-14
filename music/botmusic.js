@@ -117,6 +117,7 @@ class BotMusic {
     }
 
     async playsong(){
+        // if no song in the queue
         if (this.server.Queue.length == 0) {
             this.message.channel.send(`The queue is empty!`);
             this.isplaying = false;
@@ -212,11 +213,10 @@ class BotMusic {
     }
 
     load_playlist(message) {
-        this.server.Queue = db.loadplaylist(this.server, message);
-    }
-
-    delete_playlist(message) {
+        let playlist = db.loadplaylist(this.server, message);
+        if (!playlist) return message.channel.send('Playlist not found');
         
+        this.server.Queue = playlist;
     }
 
 }
