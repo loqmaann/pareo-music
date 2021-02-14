@@ -1,5 +1,6 @@
 const ytdl = require("ytdl-core");
 const Discord = require('discord.js');
+const db = require('../utilities/database.js');
 
 class BotMusic {
     constructor() {
@@ -204,6 +205,18 @@ class BotMusic {
             this.server.dispatcher.end();
             this.isplaying = false;
         }
+    }
+
+    save_playlist(message) {
+        db.saveplaylist(this.server, message);
+    }
+
+    load_playlist(message) {
+        this.server.Queue = db.loadplaylist(this.server, message);
+    }
+
+    delete_playlist(message) {
+        
     }
 
 }

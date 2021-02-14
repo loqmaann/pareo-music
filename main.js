@@ -131,8 +131,12 @@ bot.on('message', async message=>{
             botmusic.leavechannel();
         break;
 
-        case 'send':
-            console.log(botmusic.gettitle(args[1]));
+        case 'save':
+            botmusic.save_playlist(message);
+        break;
+
+        case 'load':
+            botmusic.load_playlist(message);
         break;
     }
 })

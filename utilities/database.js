@@ -1,51 +1,76 @@
+const { Channel } = require('discord.js');
 const fs = require('fs');
 const { platform } = require('os');
 const { resolve } = require('path');
-const delay = 100;
 
-var servers = {}
+const playlist = './utilities/playlist.json';
+const database = './utilities/database.json';
 
-async function saveplaylist(guildID, creator, name, songs){
-    var newservers = servers;
-    newservers[guildID] = {
-        creator: creator,
-        name: name,
-        songs: songs
+var obj = {};
+
+function save_playlist(server, message){
+    var db = load_database();
+    db[message.author.id] = {
+        songs: server.Queue
     };
-    let data = JSON.stringify(newservers);
-    fs.writeFile('./utilities/playlist_database.json', data, function (err) {
-        if (err) throw err;
-        console.log('Data stored!');
-    });
+
+    let data = JSON.stringify(db, null, 2);
+    fs.writeFileSync(playlist, data);
+
+    message.channel.send(`${message.author.username}'s playlist saved`);
 };
 
-async function loadplaylist(){
-    return fs.readFile('./utilities/playlist_database.json', function(err, rawdata) {
-        if (err) throw err;
-        let playlist = JSON.parse(rawdata);
-        servers = playlist;
-    });
+function load_database(){
+    try {
+        var rawdata = fs.readFileSync(database);
+        var db = JSON.parse(rawdata);
+        return db;
+    } catch(err) {
+        fs.writeFileSync(database, '{}');
+        var rawdata = fs.readFileSync(database);
+        var db = JSON.parse(rawdata);
+    }
+
+    return db;
+    
 }
 
-async function sendplaylist(){
-    return servers;
+function load_playlist(server, message){
+    let db = load_database();
+    if(!db[message.author.id]) return message.channel.send('Playlist is not found');
+
+    message.channel.send(`${message.author.username}'s playlist loaded`);
+
+    return db[message.author.id].songs;
+}
+
+function delete_playlist(message) {
+    let db = load_database();
+    if(!db[server.guildID]) return message.channel.send('Playlist is not existed');
+    if(!db[server.guildID].list[name]) return message.channel.send('Playlist is not existed');
+
+
+}
+
+function backup_database() {
+    fs.copyFile(playlist, database, (err) => {
+        if (err) throw err;
+
+        console.log('Data backup');
+    })
 }
 
 module.exports = {
-    saveplaylist: function (guildID, creator, name, songs) {
-        loadplaylist().then(() => {
-            setTimeout(() => {
-                saveplaylist(guildID, creator, name, songs);
-            }, delay);
-        });
+    saveplaylist: async function (server, message) {
+        save_playlist(server, message);
+        backup_database();
     },
 
-    loadplaylist: function (guildID, name) {
-        loadplaylist().then(() => {
-            setTimeout(() => {
-                if (!servers[guildID]) return console.log(`not exists!`);
-                return sendplaylist();
-            }, delay);
-        });
+    loadplaylist: function (server, message) {
+        return load_playlist(server, message)
+    },
+
+    deleteplaylist: function (message) {
+
     }
 };
