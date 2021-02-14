@@ -20,4 +20,8 @@
 
 -loop none/one/all/status - Change the loop status
 
+-save - Save the current playlist for the user
+
+-load - Load the playlist of the user
+
 -rand [digit] - Generates a random number with given digit (yep, that's it)
